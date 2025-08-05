@@ -1,0 +1,25 @@
+/* Custom styles for animations and specific elements */
+
+/* Hiệu ứng cho các nút đáp án */
+.answer-button {
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.answer-button:hover {
+    transform: translateY(-2px);
+}
+
+.answer-correct {
+    background-color: #10B981 !important; /* Green-500 */
+    color: white !important;
+}
+
+.answer-incorrect {
+    background-color: #EF4444 !important; /* Red-500 */
+    color: white !important;
+}
+
+/* Ẩn input file mặc định */
+#tsv-file {
+    display: none;
+}
