@@ -2,18 +2,20 @@ const homeScreen = document.getElementById('home-screen');
 const setupScreen = document.getElementById('setup-screen');
 const quizScreen = document.getElementById('quiz-screen');
 
-const tsvFile = document.getElementById('tsv-file');
+const csvFile = document.getElementById('csv-file');
 const flashcardList = document.getElementById('flashcard-list');
 const quizCountInput = document.getElementById('quiz-count-input');
 const startButton = document.getElementById('start-button');
 const backToHomeButton = document.getElementById('back-to-home');
 const maxQuestionsInfo = document.getElementById('max-questions-info');
 const currentDeckName = document.getElementById('current-deck-name');
+const exitQuizButton = document.getElementById('exit-quiz');
 
 const questionTerm = document.getElementById('question-term');
 const answersContainer = document.getElementById('answers-container');
 const quizProgress = document.getElementById('quiz-progress');
 const scoreDisplay = document.getElementById('score-display');
+const feedbackMessage = document.getElementById('feedback-message');
 
 let allFlashcardDecks = {};
 let currentDeckData = [];
@@ -23,16 +25,16 @@ let score = 0;
 let totalQuestions = 0;
 
 // Xử lý khi người dùng chọn tệp
-tsvFile.addEventListener('change', (event) => {
+csvFile.addEventListener('change', (event) => {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const tsvContent = e.target.result;
-            const fileName = file.name.replace('.tsv', '');
+            const csvContent = e.target.result;
+            const fileName = file.name.replace('.csv', '');
             
             // Lưu bộ thẻ mới vào đối tượng và localStorage
-            allFlashcardDecks[fileName] = parseTsvData(tsvContent);
+            allFlashcardDecks[fileName] = parseCsvData(csvContent);
             localStorage.setItem('allFlashcardDecks', JSON.stringify(allFlashcardDecks));
             
             displayFlashcardDecks();
@@ -50,7 +52,7 @@ startButton.addEventListener('click', () => {
         return;
     }
     
-    quizQuestions = shuffleArray(currentDeckData).slice(0, totalQuestions);
+    quizQuestions = shuffleArray([...currentDeckData]).slice(0, totalQuestions);
     
     currentQuestionIndex = 0;
     score = 0;
@@ -67,6 +69,14 @@ backToHomeButton.addEventListener('click', () => {
     homeScreen.classList.remove('hidden');
 });
 
+// Xử lý nút "Thoát Quiz"
+exitQuizButton.addEventListener('click', () => {
+    if (confirm('Bạn có chắc chắn muốn thoát quiz? Mọi tiến trình sẽ bị mất.')) {
+        quizScreen.classList.add('hidden');
+        homeScreen.classList.remove('hidden');
+    }
+});
+
 // Hàm hiển thị danh sách bộ thẻ
 function displayFlashcardDecks() {
     flashcardList.innerHTML = ''; // Xóa danh sách cũ
@@ -76,36 +86,45 @@ function displayFlashcardDecks() {
         flashcardList.innerHTML = '<p class="text-gray-500 text-center">Chưa có bộ thẻ nào được thêm.</p>';
     } else {
         deckNames.forEach(name => {
-            const deckCard = document.createElement('button');
-            deckCard.textContent = `${name} (${allFlashcardDecks[name].length} thẻ)`;
-            deckCard.classList.add(
-                'deck-card', 'bg-gray-200', 'hover:bg-gray-300', 'text-gray-800', 'font-semibold', 
-                'py-4', 'px-6', 'rounded-lg', 'text-left', 'w-full', 'shadow-md', 'transition-colors', 'mb-2'
-            );
-            deckCard.addEventListener('click', () => selectDeck(name));
-            flashcardList.appendChild(deckCard);
+            const deckDiv = document.createElement('div');
+            deckDiv.classList.add('flex', 'items-center', 'justify-between', 'bg-gray-200', 'p-4', 'rounded-lg', 'shadow-md', 'mb-2', 'transition-colors');
+
+            const deckButton = document.createElement('button');
+            deckButton.textContent = `${name} (${allFlashcardDecks[name].length} thẻ)`;
+            deckButton.classList.add('text-gray-800', 'font-semibold', 'text-left', 'flex-grow');
+            deckButton.addEventListener('click', () => selectDeck(name));
+
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '<i class="fas fa-trash-alt text-red-500 hover:text-red-700"></i>';
+            deleteButton.classList.add('ml-4');
+            deleteButton.addEventListener('click', (event) => {
+                event.stopPropagation(); // Ngăn chặn sự kiện click vào nút cha
+                deleteDeck(name);
+            });
+            
+            deckDiv.appendChild(deckButton);
+            deckDiv.appendChild(deleteButton);
+            flashcardList.appendChild(deckDiv);
         });
     }
 }
 
-// Xử lý khi chọn một bộ thẻ
-function selectDeck(deckName) {
-    currentDeckData = allFlashcardDecks[deckName];
-    currentDeckName.textContent = deckName;
-    
-    homeScreen.classList.add('hidden');
-    setupScreen.classList.remove('hidden');
-    
-    maxQuestionsInfo.textContent = `Tổng số câu hỏi có sẵn: ${currentDeckData.length}`;
-    quizCountInput.max = currentDeckData.length;
-    quizCountInput.value = currentDeckData.length;
+// Hàm xóa bộ thẻ
+function deleteDeck(deckName) {
+    if (confirm(`Bạn có chắc chắn muốn xóa bộ thẻ "${deckName}" không?`)) {
+        delete allFlashcardDecks[deckName];
+        localStorage.setItem('allFlashcardDecks', JSON.stringify(allFlashcardDecks));
+        displayFlashcardDecks();
+    }
 }
 
-// Phân tích dữ liệu từ tệp TSV
-function parseTsvData(tsv) {
-    const lines = tsv.trim().split('\n');
+// Phân tích dữ liệu từ tệp CSV
+function parseCsvData(csv) {
+    const lines = csv.trim().split('\n');
     return lines.map(line => {
-        const [term, definition] = line.split('\t');
+        const parts = line.split(',');
+        const term = parts[0].trim();
+        const definition = parts.slice(1).join(',').trim(); // Lấy tất cả các cột còn lại làm definition
         return { term, definition };
     });
 }
@@ -114,23 +133,24 @@ function parseTsvData(tsv) {
 function displayQuestion() {
     if (currentQuestionIndex >= totalQuestions) {
         alert(`Bạn đã hoàn thành quiz! Điểm của bạn là: ${score}/${totalQuestions}`);
-        homeScreen.classList.remove('hidden');
         quizScreen.classList.add('hidden');
+        homeScreen.classList.remove('hidden');
         return;
     }
     
     const currentQuestion = quizQuestions[currentQuestionIndex];
     questionTerm.textContent = currentQuestion.term;
     
-    const incorrectAnswers = currentDeckData
+    // Lấy 3 đáp án sai ngẫu nhiên từ toàn bộ bộ thẻ, không phải chỉ từ các câu hỏi đã chọn
+    const incorrectAnswers = shuffleArray([...currentDeckData])
         .filter(item => item.definition !== currentQuestion.definition)
-        .sort(() => 0.5 - Math.random())
-        .slice(0, 3)
-        .map(item => item.definition);
+        .map(item => item.definition)
+        .slice(0, 3);
         
     const allAnswers = shuffleArray([...incorrectAnswers, currentQuestion.definition]);
     
     answersContainer.innerHTML = '';
+    feedbackMessage.textContent = ''; // Xóa thông báo cũ
     
     allAnswers.forEach(answer => {
         const button = document.createElement('button');
@@ -152,34 +172,34 @@ function handleAnswer(button, selectedAnswer, correctAnswer) {
     answerButtons.forEach(btn => btn.disabled = true);
     
     if (selectedAnswer === correctAnswer) {
-        button.classList.add('answer-correct');
+        feedbackMessage.textContent = 'Chính xác! 🎉';
+        feedbackMessage.classList.remove('text-red-500');
+        feedbackMessage.classList.add('text-green-500');
         score++;
     } else {
-        button.classList.add('answer-incorrect');
-        const correctButton = Array.from(answerButtons).find(btn => btn.textContent === correctAnswer);
-        if (correctButton) {
-            correctButton.classList.add('answer-correct');
-        }
+        feedbackMessage.textContent = `Sai rồi, đáp án đúng là: "${correctAnswer}"`;
+        feedbackMessage.classList.remove('text-green-500');
+        feedbackMessage.classList.add('text-red-500');
     }
     
     updateProgress();
     setTimeout(() => {
         currentQuestionIndex++;
         displayQuestion();
-    }, 1000);
+    }, 2000); // Tăng thời gian hiển thị thông báo
 }
 
 // Cập nhật thông tin tiến độ và điểm số
 function updateProgress() {
     quizProgress.textContent = `Câu ${currentQuestionIndex + 1}/${totalQuestions}`;
-    scoreDisplay.textContent = `Đúng: ${score}/${totalQuestions}`;
+    scoreDisplay.textContent = `Đúng: ${score}/${currentQuestionIndex}`;
 }
 
 // Hàm xáo trộn mảng
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[i], array[j]];
+        [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
 }
@@ -192,3 +212,17 @@ window.addEventListener('load', () => {
     }
     displayFlashcardDecks();
 });
+
+// Chức năng chọn bộ thẻ
+function selectDeck(deckName) {
+    currentDeckData = allFlashcardDecks[deckName];
+    currentDeckName.textContent = deckName;
+    
+    homeScreen.classList.add('hidden');
+    setupScreen.classList.remove('flex'); // Dùng flex để hiển thị
+    setupScreen.classList.add('flex');
+    
+    maxQuestionsInfo.textContent = `Tổng số câu hỏi có sẵn: ${currentDeckData.length}`;
+    quizCountInput.max = currentDeckData.length;
+    quizCountInput.value = currentDeckData.length;
+}

@@ -9,17 +9,8 @@
     transform: translateY(-2px);
 }
 
-.answer-correct {
-    background-color: #10B981 !important; /* Green-500 */
-    color: white !important;
-}
-
-.answer-incorrect {
-    background-color: #EF4444 !important; /* Red-500 */
-    color: white !important;
-}
 
 /* Ẩn input file mặc định */
-#tsv-file {
+#csv-file {
     display: none;
 }
