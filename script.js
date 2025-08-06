@@ -23,6 +23,9 @@ let quizQuestions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 let totalQuestions = 0;
+// Biến mới để lưu các câu trả lời sai
+let wrongAnswers = []; 
+let hasAnsweredCurrentQuestion = false;
 
 // Xử lý khi người dùng chọn tệp
 csvFile.addEventListener('change', (event) => {
@@ -95,8 +98,14 @@ function displayFlashcardDecks() {
             deckButton.addEventListener('click', () => selectDeck(name));
 
             const deleteButton = document.createElement('button');
-            deleteButton.innerHTML = '<i class="fas fa-trash-alt text-red-500 hover:text-red-700"></i>';
+            const garbageImage = document.createElement('img');
+            garbageImage.src = 'assets/trash.svg';
+            garbageImage.alt = 'Xóa';
+            garbageImage.classList.add('h-5', 'w-5', 'fill-red-500', 'hover:fill-red-700', 'cursor-pointer');
+            deleteButton.appendChild(garbageImage);
+            
             deleteButton.classList.add('ml-4');
+
             deleteButton.addEventListener('click', (event) => {
                 event.stopPropagation(); // Ngăn chặn sự kiện click vào nút cha
                 deleteDeck(name);
@@ -131,10 +140,10 @@ function parseCsvData(csv) {
 
 // Hiển thị câu hỏi
 function displayQuestion() {
+    console.log(`${currentQuestionIndex}/${totalQuestions}`);
     if (currentQuestionIndex >= totalQuestions) {
-        alert(`Bạn đã hoàn thành quiz! Điểm của bạn là: ${score}/${totalQuestions}`);
-        quizScreen.classList.add('hidden');
-        homeScreen.classList.remove('hidden');
+        localStorage.setItem('quizResult', JSON.stringify({ score, totalQuestions, wrongAnswers }));
+        window.location.href = 'result.html';
         return;
     }
     
@@ -151,7 +160,8 @@ function displayQuestion() {
     
     answersContainer.innerHTML = '';
     feedbackMessage.textContent = ''; // Xóa thông báo cũ
-    
+    hasAnsweredCurrentQuestion = false;
+
     allAnswers.forEach(answer => {
         const button = document.createElement('button');
         button.textContent = answer;
@@ -159,7 +169,7 @@ function displayQuestion() {
             'answer-button', 'bg-gray-200', 'hover:bg-gray-300', 'text-gray-800', 'font-semibold', 
             'py-4', 'px-6', 'rounded-lg', 'text-left', 'w-full', 'shadow-md', 'transition-colors'
         );
-        button.addEventListener('click', () => handleAnswer(button, answer, currentQuestion.definition));
+        button.addEventListener('click', () => handleAnswer(answer, currentQuestion.term, currentQuestion.definition));
         answersContainer.appendChild(button);
     });
     
@@ -167,7 +177,9 @@ function displayQuestion() {
 }
 
 // Xử lý khi người dùng chọn đáp án
-function handleAnswer(button, selectedAnswer, correctAnswer) {
+function handleAnswer(selectedAnswer, term, correctAnswer) {
+    if (hasAnsweredCurrentQuestion) return;
+
     const answerButtons = answersContainer.querySelectorAll('.answer-button');
     answerButtons.forEach(btn => btn.disabled = true);
     
@@ -180,8 +192,14 @@ function handleAnswer(button, selectedAnswer, correctAnswer) {
         feedbackMessage.textContent = `Sai rồi, đáp án đúng là: "${correctAnswer}"`;
         feedbackMessage.classList.remove('text-green-500');
         feedbackMessage.classList.add('text-red-500');
+        wrongAnswers.push({
+            question: term,
+            yourAnswer: selectedAnswer,
+            correctAnswer: correctAnswer
+        });
     }
-    
+
+    hasAnsweredCurrentQuestion = true;
     updateProgress();
     setTimeout(() => {
         currentQuestionIndex++;
@@ -192,7 +210,7 @@ function handleAnswer(button, selectedAnswer, correctAnswer) {
 // Cập nhật thông tin tiến độ và điểm số
 function updateProgress() {
     quizProgress.textContent = `Câu ${currentQuestionIndex + 1}/${totalQuestions}`;
-    scoreDisplay.textContent = `Đúng: ${score}/${currentQuestionIndex}`;
+    scoreDisplay.textContent = `Đúng: ${score}/${totalQuestions}`;
 }
 
 // Hàm xáo trộn mảng
@@ -219,6 +237,7 @@ function selectDeck(deckName) {
     currentDeckName.textContent = deckName;
     
     homeScreen.classList.add('hidden');
+    setupScreen.classList.remove('hidden');
     setupScreen.classList.remove('flex'); // Dùng flex để hiển thị
     setupScreen.classList.add('flex');
     
