@@ -11,22 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (resultData.wrongAnswers.length > 0) {
             resultData.wrongAnswers.forEach(item => {
                 const li = document.createElement('li');
-                li.classList.add('mb-4', 'p-4', 'bg-red-50', 'rounded-lg', 'border', 'border-red-200');
+                li.classList.add('incorrect-answer-item');
                 li.innerHTML = `
-                    <p class="font-bold">Câu hỏi: ${item.question}</p>
-                    <p class="text-sm">Câu trả lời của bạn: <span class="text-red-600 font-semibold">${item.yourAnswer}</span></p>
-                    <p class="text-sm">Đáp án đúng: <span class="text-green-600 font-semibold">${item.correctAnswer}</span></p>
+                    <p class="incorrect-question">Câu hỏi: ${item.question}</p>
+                    <p class="incorrect-your-answer">Câu trả lời của bạn: <span>${item.yourAnswer}</span></p>
+                    <p class="incorrect-correct-answer">Đáp án đúng: <span>${item.correctAnswer}</span></p>
                 `;
                 incorrectAnswersList.appendChild(li);
             });
         } else {
-            noMistakesMessage.classList.remove('hidden');
+            noMistakesMessage.classList.remove('hidden-element');
         }
         
-        // Xóa dữ liệu quiz khỏi localStorage để không hiển thị lại khi tải lại trang
         localStorage.removeItem('quizResult');
     } else {
-        // Nếu không có dữ liệu, quay về trang chủ
         window.location.href = 'index.html';
     }
 });
