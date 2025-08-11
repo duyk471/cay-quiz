@@ -1,11 +1,12 @@
 /* result-style.css */
 
 .result-container {
-    width: 100%;
-    max-width: 48rem;
+    /* width: 100%;
+    max-width: 48rem; */
     margin: 0 auto;
     padding: 1rem;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -19,7 +20,7 @@
 }
 
 .summary-card, .incorrect-answers-card {
-    width: 100%;
+    /* width: 100%; */
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 0.5rem;

@@ -4,10 +4,11 @@
 body {
     font-family: Arial, sans-serif;
     font-size: 1rem;
-    background-color: #f3f4f6; /* Màu nền tương tự Tailwind gray-100 */
+    background-color: #f3f4f6;
     margin: 0;
     padding: 1rem;
     display: flex;
+    flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
@@ -15,7 +16,7 @@ body {
 
 .container {
     width: 100%;
-    max-width: 48rem; /* max-w-2xl */
+    max-width: 48rem;
     margin: 0 auto;
     padding: 1rem;
     display: flex;
@@ -31,26 +32,26 @@ body {
 
 /* Trang chủ và danh sách bộ thẻ */
 .main-title {
-    font-size: 2.25rem; /* text-4xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 2rem; /* mb-8 */
-    color: #1f2937; /* text-gray-800 */
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #1f2937;
 }
 
 .flashcard-list {
     width: 100%;
     background-color: #fff;
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
-    margin-bottom: 1.5rem; /* mb-6 */
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    margin-bottom: 1.5rem;
 }
 
 .flashcard-deck {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #e5e7eb; /* bg-gray-200 */
+    background-color: #e5e7eb;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -59,46 +60,50 @@ body {
 }
 
 .flashcard-deck:hover {
-    background-color: #d1d5db; /* hover:bg-gray-300 */
+    background-color: #d1d5db;
 }
 
 .deck-name-btn {
     flex-grow: 1;
     text-align: left;
     font-size: 1rem;
-    font-weight: 600; /* font-semibold */
-    color: #1f2937; /* text-gray-800 */
+    font-weight: 600;
+    color: #1f2937;
     border: none;
     background: none;
     cursor: pointer;
     padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .delete-btn {
-    margin-left: 1rem; /* ml-4 */
+    margin-left: 1rem;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
+    flex-shrink: 0;
 }
 
 .delete-icon {
-    height: 1.25rem; /* h-5 */
-    width: 1.25rem; /* w-5 */
-    fill: #ef4444; /* text-red-500 */
+    height: 1.25rem;
+    width: 1.25rem;
+    fill: #ef4444;
     transition: fill 0.3s ease;
 }
 
 .delete-icon:hover {
-    fill: #b91c1c; /* hover:text-red-700 */
+    fill: #b91c1c;
 }
 
 /* Các nút chung */
 .btn {
-    font-weight: 700; /* font-bold */
-    padding: 0.75rem 1.5rem; /* py-3 px-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); /* shadow-lg */
+    font-weight: 700;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
     border: none;
     cursor: pointer;
@@ -107,43 +112,43 @@ body {
 }
 
 .btn-primary {
-    background-color: #3b82f6; /* bg-blue-500 */
+    background-color: #3b82f6;
     color: #fff;
 }
 
 .btn-primary:hover {
-    background-color: #2563eb; /* hover:bg-blue-600 */
+    background-color: #2563eb;
 }
 
 .btn-success {
-    background-color: #22c55e; /* bg-green-500 */
+    background-color: #22c55e;
     color: #fff;
-    margin-top: 1.5rem; /* mt-6 */
+    margin-top: 1.5rem;
 }
 
 .btn-success:hover {
-    background-color: #16a34a; /* hover:bg-green-600 */
+    background-color: #16a34a;
 }
 
 .btn-danger {
-    background-color: #ef4444; /* bg-red-500 */
+    background-color: #ef4444;
     color: #fff;
-    padding: 0.5rem 1rem; /* py-2 px-4 */
-    margin-top: 1.5rem; /* mt-6 */
+    padding: 0.5rem 1rem;
+    margin-top: 1.5rem;
 }
 
 .btn-danger:hover {
-    background-color: #dc2626; /* hover:bg-red-600 */
+    background-color: #dc2626;
 }
 
 .btn-text {
     background: none;
-    color: #6b7280; /* text-gray-500 */
-    margin-top: 1rem; /* mt-4 */
+    color: #6b7280;
+    margin-top: 1rem;
 }
 
 .btn-text:hover {
-    color: #4b5563; /* hover:text-gray-700 */
+    color: #4b5563;
 }
 
 .hidden-input {
@@ -152,36 +157,36 @@ body {
 
 /* Màn hình cài đặt */
 .setup-title {
-    font-size: 1.875rem; /* text-3xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 1.5rem; /* mb-6 */
-    color: #1f2937; /* text-gray-800 */
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
 }
 
 .deck-name {
-    color: #2563eb; /* text-blue-600 */
+    color: #2563eb;
 }
 
 .input-field {
     width: 100%;
-    max-width: 24rem; /* max-w-sm */
-    padding: 0.5rem 1rem; /* px-4 py-2 */
+    max-width: 24rem;
+    padding: 0.5rem 1rem;
     text-align: center;
-    font-size: 1.125rem; /* text-lg */
-    border: 2px solid #d1d5db; /* border-2 border-gray-300 */
-    border-radius: 0.5rem; /* rounded-lg */
+    font-size: 1.125rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
     outline: none;
     transition: border-color 0.3s ease;
 }
 
 .input-field:focus {
-    border-color: #3b82f6; /* focus:border-blue-500 */
+    border-color: #3b82f6;
 }
 
 .info-text {
-    font-size: 0.875rem; /* text-sm */
-    color: #6b7280; /* text-gray-500 */
-    margin-top: 0.5rem; /* mt-2 */
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
 }
 
 /* Màn hình Quiz */
@@ -189,49 +194,51 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem; /* mb-6 */
+    margin-bottom: 1.5rem;
     width: 100%;
 }
 
 .quiz-progress, .score-display {
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 600; /* font-semibold */
-    color: #374151; /* text-gray-700 */
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    flex: 1;
+    text-align: center;
+}
+.quiz-progress {
+    text-align: left;
+}
+.score-display {
+    text-align: right;
 }
 
 .quiz-card {
     background-color: #fff;
-    padding: 1.5rem; /* p-6 */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     width: 100%;
 }
 
 .question-term {
-    font-size: 1.5rem; /* text-2xl */
-    font-weight: 700; /* font-bold */
-    margin-bottom: 1.5rem; /* mb-6 */
-    color: #1f2937; /* text-gray-800 */
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
 }
 
 .answers-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem; /* gap-4 */
-}
-
-@media (min-width: 768px) {
-    .answers-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    gap: 1rem;
 }
 
 .answer-button {
-    background-color: #e5e7eb; /* bg-gray-200 */
-    color: #1f2937; /* text-gray-800 */
-    font-weight: 600; /* font-semibold */
-    padding: 1rem 1.5rem; /* py-4 px-6 */
-    border-radius: 0.5rem; /* rounded-lg */
+    background-color: #e5e7eb;
+    color: #1f2937;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
     text-align: left;
     width: 100%;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -241,15 +248,15 @@ body {
 }
 
 .answer-button:hover {
-    background-color: #d1d5db; /* hover:bg-gray-300 */
+    background-color: #d1d5db;
     transform: translateY(-2px);
 }
 
 .feedback-message {
-    margin-top: 1rem; /* mt-4 */
+    margin-top: 1rem;
     text-align: center;
-    font-size: 1.125rem; /* text-lg */
-    font-weight: 700; /* font-bold */
+    font-size: 1.125rem;
+    font-weight: 700;
 }
 
 .text-red {
@@ -263,6 +270,70 @@ body {
 .quiz-footer {
     display: flex;
     justify-content: center;
-    margin-top: 1.5rem; /* mt-6 */
+    margin-top: 1.5rem;
     width: 100%;
+}
+
+/* * Sử dụng @media queries để tối ưu hóa cho màn hình điện thoại 
+ * (chiều rộng tối đa 767px)
+ */
+@media (max-width: 767px) {
+    body {
+        margin: 0;
+        padding: 0.5rem;
+    }
+
+    .container {
+        padding: 0; /* Giảm padding container */
+    }
+
+    .main-title {
+        font-size: 1.8rem; /* Giảm kích thước tiêu đề chính */
+        margin-bottom: 1.5rem;
+    }
+
+    .flashcard-list, .quiz-card {
+        padding: 0; /* Giảm padding của các card */
+    }
+
+    .flashcard-deck {
+        padding: 0.75rem; /* Giảm padding của mỗi bộ thẻ */
+    }
+    
+    .deck-name-btn {
+        font-size: 0.9rem; /* Giảm kích thước font tên bộ thẻ */
+    }
+
+    .setup-title {
+        font-size: 1.5rem; /* Giảm kích thước tiêu đề cài đặt */
+    }
+
+    .input-field {
+        font-size: 1rem; /* Giảm kích thước font input */
+        padding: 0.5rem;
+        width: 80%;
+    }
+
+    .btn {
+        padding: 0.6rem 1.2rem; /* Giảm padding các nút */
+        font-size: 0.9rem;
+    }
+
+    .question-term {
+        font-size: 1.2rem; /* Giảm kích thước font câu hỏi */
+    }
+
+    .answers-grid {
+        gap: 0.8rem; /* Giảm khoảng cách giữa các đáp án */
+        padding: 0.5rem;
+    }
+
+    .answer-button {
+        padding: 0.8rem 1rem; /* Giảm padding của các nút đáp án */
+        font-size: 0.9rem;
+    }
+
+    .feedback-message {
+        font-size: 1rem; /* Giảm kích thước font thông báo */
+    }
 }
